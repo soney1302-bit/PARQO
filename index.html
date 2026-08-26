@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0"
+>
+
+<title>PARQO — Multiplayer Card Game</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #1e3a8a,
+            #0f172a 55%
+        );
+
+    color:white;
+
+    min-height:100vh;
+}
+
+button,
+input{
+
+    font:inherit;
+}
+
+button{
+
+    border:0;
+
+    cursor:pointer;
+}
+
+.app{
+
+    width:100%;
+
+    max-width:760px;
+
+    margin:auto;
+
+    padding:22px;
+}
+
+.logo{
+
+    text-align:center;
+
+    font-size:48px;
+
+    font-weight:900;
+
+    letter-spacing:5px;
+
+    margin:10px 0 4px;
+
+    text-shadow:
+        0 5px 20px
+        rgba(0,0,0,.4);
+}
+
+.tag{
+
+    text-align:center;
+
+    color:#cbd5e1;
+
+    margin-bottom:22px;
+}
+
+.card{
+
+    background:
+        rgba(30,41,59,.96);
+
+    border-radius:22px;
+
+    padding:22px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.4);
+}
+
+input{
+
+    width:100%;
+
+    padding:14px;
+
+    border:0;
+
+    border-radius:12px;
+
+    margin:7px 0;
+
+    background:#f8fafc;
+
+    color:#111827;
+
+    outline:none;
+}
+
+input:focus{
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59,130,246,.4);
+}
+
+.btn{
+
+    width:100%;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    margin-top:10px;
+
+    font-weight:800;
+
+    color:white;
+
+    background:#334155;
+
+    transition:
+        transform .15s,
+        opacity .15s;
+}
+
+.btn:hover{
+
+    transform:
+        translateY(-2px);
+}
+
+.btn:disabled{
+
+    opacity:.45;
+
+    cursor:not-allowed;
+
+    transform:none;
+}
+
+.green{
+    background:#16a34a;
+}
+
+.blue{
+    background:#2563eb;
+}
+
+.orange{
+    background:#ea580c;
+}
+
+.red{
+    background:#dc2626;
+}
+
+.divider{
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    margin:20px 0;
+}
+
+.error{
+
+    color:#fca5a5;
+
+    text-align:center;
+
+    margin-top:12px;
+
+    min-height:20px;
+
+    font-weight:600;
+}
+
+.top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.badge{
+
+    background:#334155;
+
+    padding:8px 12px;
+
+    border-radius:999px;
+
+    font-weight:800;
+}
+
+.roomCode{
+
+    text-align:center;
+
+    font-size:42px;
+
+    font-weight:900;
+
+    letter-spacing:7px;
+
+    margin:15px 0;
+}
+
+.players{
+
+    display:grid;
+
+    gap:10px;
+
+    margin-top:15px;
+}
+
+.player{
+
+    padding:14px;
+
+    border-radius:14px;
+
+    background:#334155;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:10px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.05);
+}
+
+.playerLeft{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    min-width:0;
+}
+
+.playerName{
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+}
+
+.onlineDot{
+
+    width:10px;
+
+    height:10px;
+
+    background:#22c55e;
+
+    border-radius:50%;
+
+    box-shadow:
+        0 0 10px
+        #22c55e;
+}
+
+.hostBadge{
+
+    background:#f59e0b;
+
+    color:#111827;
+
+    padding:5px 9px;
+
+    border-radius:999px;
+
+    font-size:11px;
+
+    font-weight:900;
+}
+
+.waiting{
+
+    text-align:center;
+
+    background:#0f172a;
+
+    border-radius:14px;
+
+    padding:16px;
+
+    margin-top:15px;
+
+    color:#cbd5e1;
+}
+
+.ready{
+
+    text-align:center;
+
+    background:#14532d;
+
+    border-radius:14px;
+
+    padding:14px;
+
+    margin-top:15px;
+
+    color:#bbf7d0;
+
+    font-weight:800;
+}
+
+.notice{
+
+    position:fixed;
+
+    left:50%;
+
+    bottom:25px;
+
+    transform:
+        translateX(-50%)
+        translateY(100px);
+
+    background:#020617;
+
+    color:white;
+
+    padding:13px 20px;
+
+    border-radius:999px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,.5);
+
+    opacity:0;
+
+    transition:
+        .3s ease;
+
+    z-index:1000;
+
+    max-width:90%;
+
+    text-align:center;
+}
+
+.notice.show{
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+
+    opacity:1;
+}
+
+.muted{
+
+    color:#94a3b8;
+}
+
+.cards{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    margin:18px 0;
+}
+
+.cardItem{
+
+    width:90px;
+
+    min-height:105px;
+
+    border-radius:16px;
+
+    background:#f8fafc;
+
+    color:#111827;
+
+    padding:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    font-weight:900;
+
+    box-shadow:
+        0 8px 18px
+        rgba(0,0,0,.25);
+
+    cursor:pointer;
+
+    border:
+        4px solid
+        transparent;
+
+    transition:.15s;
+}
+
+.cardItem.selected{
+
+    border-color:#facc15;
+
+    transform:
+        translateY(-5px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(250,204,21,.25);
+}
+
+.targetGrid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:9px;
+}
+
+.target{
+
+    background:#475569;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    color:white;
+}
+
+.target.selected{
+
+    background:#2563eb;
+}
+
+.status{
+
+    padding:13px;
+
+    border-radius:12px;
+
+    background:#0f172a;
+
+    margin:12px 0;
+
+    text-align:center;
+}
+
+.win{
+
+    background:#166534;
+
+    padding:20px;
+
+    border-radius:16px;
+
+    text-align:center;
+
+    margin-bottom:15px;
+}
+
+.lobbyProgress{
+
+    height:8px;
+
+    background:#0f172a;
+
+    border-radius:99px;
+
+    overflow:hidden;
+
+    margin-top:12px;
+}
+
+.lobbyProgressBar{
+
+    height:100%;
+
+    background:#22c55e;
+
+    transition:.3s;
+}
+
+@media(max-width:520px){
+
+    .logo{
+
+        font-size:38px;
+    }
+
+    .cardItem{
+
+        width:76px;
+
+        min-height:90px;
+    }
+
+    .roomCode{
+
+        font-size:34px;
+    }
+
+    .app{
+
+        padding:14px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="logo">
+        PARQO
+    </div>
+
+    <div class="tag">
+        Collect 4. Complete the Set. Win!
+    </div>
+
+    <div
+        id="screen"
+        class="card"
+    ></div>
+
+</div>
+
+<div
+    id="notice"
+    class="notice"
+></div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+
+const socket =
+    io();
+
+let selectedCard =
+    null;
+
+let selectedTarget =
+    null;
+
+let currentState =
+    null;
+
+let currentRoomCode =
+    null;
+
+let currentPlayers =
+    [];
+
+let currentHostId =
+    null;
+
+
+// =========================================
+// ELEMENT HELPERS
+// =========================================
+
+const screen =
+    document.getElementById(
+        "screen"
+    );
+
+const notice =
+    document.getElementById(
+        "notice"
+    );
+
+
+// =========================================
+// ESCAPE HTML
+// =========================================
+
+function esc(value){
+
+    return String(
+        value ?? ""
+    ).replace(
+        /[&<>"']/g,
+        c => ({
+            "&":"&amp;",
+            "<":"&lt;",
+            ">":"&gt;",
+            '"':"&quot;",
+            "'":"&#039;"
+        }[c])
+    );
+}
+
+
+// =========================================
+// ERROR
+// =========================================
+
+function errorText(
+    message
+){
+
+    const el =
+        document.getElementById(
+            "error"
+        );
+
+    if(el){
+
+        el.textContent =
+            message || "";
+    }
+}
+
+
+// =========================================
+// NOTIFICATION
+// =========================================
+
+function showNotice(
+    message
+){
+
+    if(!notice)
+        return;
+
+    notice.textContent =
+        message;
+
+    notice.classList.add(
+        "show"
+    );
+
+    clearTimeout(
+        window.parqoNoticeTimer
+    );
+
+    window.parqoNoticeTimer =
+        setTimeout(
+            () => {
+
+                notice.classList.remove(
+                    "show"
+                );
+
+            },
+            2500
+        );
+}
+
+
+// =========================================
+// HOME
+// =========================================
+
+function home(){
+
+    screen.innerHTML = `
+
+        <h2>
+            🎮 Multiplayer
+        </h2>
+
+        <input
+            id="playerName"
+            maxlength="20"
+            placeholder="Your name"
+        >
+
+        <button
+            class="btn green"
+            onclick="createRoom()"
+        >
+            CREATE ROOM
+        </button>
+
+        <div class="divider">
+            — OR —
+        </div>
+
+        <input
+            id="roomCode"
+            maxlength="5"
+            placeholder="Enter Room Code"
+        >
+
+        <button
+            class="btn blue"
+            onclick="joinRoom()"
+        >
+            JOIN ROOM
+        </button>
+
+        <div
+            id="error"
+            class="error"
+        ></div>
+
+    `;
+}
+
+home();
+
+// WhatsApp / direct room link se Room Code automatically read karo
+const urlRoom = new URLSearchParams(window.location.search).get("room");
+
+if (urlRoom) {
+    const roomInput = document.getElementById("roomCode");
+
+    if (roomInput) {
+        roomInput.value = urlRoom.toUpperCase();
+    }
+}
+
+
+// =========================================
+// GET NAME
+// =========================================
+
+function getName(){
+
+    return (
+        document
+        .getElementById(
+            "playerName"
+        )
+        ?.value
+        .trim()
+        || ""
+    );
+}
+
+
+// =========================================
+// CREATE ROOM
+// =========================================
+
+function createRoom(){
+
+    const name =
+        getName();
+
+    if(!name){
+
+        errorText(
+            "Pehle apna naam enter karo."
+        );
+
+        return;
+    }
+
+    socket.emit(
+        "createRoom",
+        name,
+        result => {
+
+            if(
+                !result?.success
+            ){
+
+                errorText(
+                    result?.message
+                );
+
+                return;
+            }
+
+            currentRoomCode =
+                result.roomCode;
+
+            currentPlayers =
+                result.players;
+
+            currentHostId =
+                result.hostId;
+
+            showLobby(
+                result.roomCode,
+                result.players,
+                result.hostId
+            );
+        }
+    );
+}
+
+
+// =========================================
+// JOIN ROOM
+// =========================================
+
+function joinRoom(){
+
+    const name =
+        getName();
+
+    const roomCode =
+        (
+            document
+            .getElementById(
+                "roomCode"
+            )
+            ?.value
+            || ""
+        )
+        .trim()
+        .toUpperCase();
+
+    if(!name){
+
+        errorText(
+            "Pehle apna naam enter karo."
+        );
+
+        return;
+    }
+
+    if(!roomCode){
+
+        errorText(
+            "Room Code enter karo."
+        );
+
+        return;
+    }
+
+    socket.emit(
+        "joinRoom",
+        {
+            roomCode,
+            playerName:name
+        },
+        result => {
+
+            if(
+                !result?.success
+            ){
+
+                errorText(
+                    result?.message
+                );
+
+                return;
+            }
+
+            currentRoomCode =
+                result.roomCode;
+
+            currentPlayers =
+                result.players;
+
+            currentHostId =
+                result.hostId;
+
+            showLobby(
+                result.roomCode,
+                result.players,
+                result.hostId
+            );
+        }
+    );
+}
+
+
+// =========================================
+// ROOM CREATED
+// =========================================
+
+socket.on(
+    "roomCreated",
+    data => {
+
+        currentRoomCode =
+            data.roomCode;
+
+        currentPlayers =
+            data.players;
+
+        currentHostId =
+            data.hostId;
+
+        showLobby(
+            data.roomCode,
+            data.players,
+            data.hostId
+        );
+    }
+);
+
+
+// =========================================
+// ROOM JOINED
+// =========================================
+
+socket.on(
+    "roomJoined",
+    data => {
+
+        currentRoomCode =
+            data.roomCode;
+
+        currentPlayers =
+            data.players;
+
+        currentHostId =
+            data.hostId;
+
+        showLobby(
+            data.roomCode,
+            data.players,
+            data.hostId
+        );
+    }
+);
+
+
+// =========================================
+// PLAYERS UPDATED
+// =========================================
+
+socket.on(
+    "playersUpdated",
+    data => {
+
+        if(!currentRoomCode)
+            return;
+
+        currentPlayers =
+            data.players;
+
+        currentHostId =
+            data.hostId;
+
+        if(
+            !currentState ||
+            !currentState.started
+        ){
+
+            showLobby(
+                currentRoomCode,
+                currentPlayers,
+                currentHostId
+            );
+        }
+    }
+);
+
+
+// =========================================
+// HOST CHANGED
+// =========================================
+
+socket.on(
+    "hostChanged",
+    data => {
+
+        currentHostId =
+            data.hostId;
+
+        showNotice(
+            `👑 ${data.hostName} ab host hai`
+        );
+
+        if(
+            currentRoomCode
+        ){
+
+            showLobby(
+                currentRoomCode,
+                currentPlayers,
+                currentHostId
+            );
+        }
+    }
+);
+
+
+// =========================================
+// LOBBY MESSAGE
+// =========================================
+
+socket.on(
+    "lobbyMessage",
+    message => {
+
+        showNotice(
+            message
+        );
+    }
+);
+
+
+// =========================================
+// GAME STATE
+// =========================================
+
+socket.on(
+    "gameState",
+    state => {
+
+        currentState =
+            state;
+
+        currentRoomCode =
+            state.roomCode;
+
+        currentPlayers =
+            state.players;
+
+        currentHostId =
+            state.hostId;
+
+        if(state.started){
+
+            renderGame(
+                state
+            );
+        }
+    }
+);
+
+
+// =========================================
+// SHOW LOBBY
+// =========================================
+
+function showLobby(
+    roomCode,
+    players,
+    hostId
+){
+
+    currentRoomCode =
+        roomCode;
+
+    currentPlayers =
+        players;
+
+    currentHostId =
+        hostId;
+
+    const isHost =
+        socket.id === hostId;
+
+    const playerCount =
+        players.length;
+
+    const minimumReached =
+        playerCount >= 4;
+
+    const progress =
+        Math.min(
+            100,
+            (playerCount / 6) * 100
+        );
+
+    screen.innerHTML = `
+
+        <div class="top">
+
+            <h2>
+                🎮 PARQO ROOM
+            </h2>
+
+            <span class="badge">
+                ${playerCount}/6
+                PLAYERS
+            </span>
+
+        </div>
+
+
+        <p class="muted">
+
+            Room code friends ke saath share karo:
+
+        </p>
+
+
+        <div
+            class="roomCode"
+            id="roomCodeDisplay"
+        >
+            ${esc(roomCode)}
+        </div>
+
+
+        <button class="btn blue" onclick="copyCode('${esc(roomCode)}')">
+    📋 COPY ROOM CODE
+</button>
+
+<button class="btn green" onclick="shareWhatsApp('${esc(roomCode)}')">
+    📱 SHARE ON WHATSAPP
+</button>
+
+
+        <div
+            class="lobbyProgress"
+        >
+
+            <div
+                class="lobbyProgressBar"
+                style="width:${progress}%"
+            ></div>
+
+        </div>
+
+
+        ${
+            minimumReached
+
+            ?
+
+            `
+            <div class="ready">
+
+                🟢 READY!
+
+                <br>
+
+                ${playerCount}
+                players room me hain.
+
+            </div>
+            `
+
+            :
+
+            `
+            <div class="waiting">
+
+                ⏳ Waiting for players...
+
+                <br>
+
+                ${4 - playerCount}
+                aur player chahiye.
+
+            </div>
+            `
+        }
+
+
+        <h3>
+            Players
+        </h3>
+
+
+        <div class="players">
+
+            ${
+                players.map(
+                    (player,index) => {
+
+                        const isPlayerHost =
+                            player.id ===
+                            hostId;
+
+                        return `
+
+                            <div
+                                class="player"
+                            >
+
+                                <div
+                                    class="playerLeft"
+                                >
+
+                                    <span
+                                        class="onlineDot"
+                                    ></span>
+
+                                    <span
+                                        class="playerName"
+                                    >
+
+                                        👤
+                                        ${esc(
+                                            player.name
+                                        )}
+
+                                    </span>
+
+                                </div>
+
+
+                                ${
+                                    isPlayerHost
+
+                                    ?
+
+                                    `
+                                    <span
+                                        class="hostBadge"
+                                    >
+                                        👑 HOST
+                                    </span>
+                                    `
+
+                                    :
+
+                                    `
+                                    <span
+                                        class="muted"
+                                    >
+                                        ONLINE
+                                    </span>
+                                    `
+                                }
+
+                            </div>
+
+                        `;
+                    }
+                ).join("")
+            }
+
+        </div>
+
+
+        ${
+            isHost
+
+            ?
+
+            `
+            <button
+                class="btn green"
+                onclick="startGame()"
+                ${minimumReached ? "" : "disabled"}
+            >
+
+                ${
+                    minimumReached
+
+                    ?
+
+                    "🚀 START GAME"
+
+                    :
+
+                    "⏳ WAITING FOR 4 PLAYERS"
+                }
+
+            </button>
+
+            `
+
+            :
+
+            `
+            <div class="waiting">
+
+                ⏳
+
+                <b>
+                    Waiting for host...
+                </b>
+
+                <br>
+
+                Host game start karega.
+
+            </div>
+
+            `
+        }
+
+
+        <div
+            id="error"
+            class="error"
+        ></div>
+
+
+        <p
+            class="muted"
+            style="text-align:center"
+        >
+
+            Minimum 4 players
+            •
+            Maximum 6 players
+
+        </p>
+
+    `;
+}
+
+
+// =========================================
+// COPY CODE
+// =========================================
+
+function copyCode(
+    code
+){
+
+    if(
+        navigator.clipboard
+    ){
+
+        navigator.clipboard
+            .writeText(code)
+            .then(
+                () => {
+
+                    showNotice(
+                        "✅ Room Code copied!"
+                    );
+
+                }
+            );
+
+    }
+
+}
+// =========================================
+// SHARE ON WHATSAPP
+// =========================================
+
+function shareWhatsApp(
+    roomCode
+){
+
+    const joinLink =
+        window.location.origin +
+        "/?room=" +
+        encodeURIComponent(roomCode);
+
+    const message =
+    "🎮 PARQO Game me join karo!\n\n" +
+    "🔑 Room Code: " + roomCode + "\n\n" +
+    "👉 Join Game:\n" +
+    joinLink;
+
+    const whatsappURL =
+        "https://wa.me/?text=" +
+        encodeURIComponent(message);
+
+    window.open(
+        whatsappURL,
+        "_blank"
+    );
+
+}
+
+// =========================================
+// START GAME
+// =========================================
+
+function startGame(){
+
+    socket.emit(
+        "startGame",
+        result => {
+
+            if(
+                !result?.success
+            ){
+
+                errorText(
+                    result?.message
+                );
+
+                return;
+            }
+
+            showNotice(
+                "🚀 Game starting!"
+            );
+        }
+    );
+}
+
+
+// =========================================
+// RENDER GAME
+// =========================================
+
+function renderGame(
+    state
+){
+
+    const myTurn =
+        state.currentPlayerId ===
+        socket.id;
+
+    const winner =
+        state.winnerId;
+
+
+    if(winner){
+
+        const isHost =
+            socket.id ===
+            state.hostId;
+
+        screen.innerHTML = `
+
+            <div class="win">
+
+                <h1>
+                    🏆 WINNER!
+                </h1>
+
+                <h2>
+                    ${esc(
+                        state.winnerName
+                    )}
+                </h2>
+
+                <p>
+
+                    ${
+                        esc(
+                            state.winningCardName
+                            || "Set"
+                        )
+                    }
+
+                    ki 4 cards
+                    complete ho gayi!
+
+                </p>
+
+            </div>
+
+
+            ${
+                isHost
+
+                ?
+
+                `
+                <button
+                    class="btn orange"
+                    onclick="newRound()"
+                >
+                    🔄 NEW ROUND
+                </button>
+                `
+
+                :
+
+                `
+                <div class="waiting">
+
+                    ⏳
+
+                    Waiting for host
+                    to start new round...
+
+                </div>
+                `
+            }
+
+        `;
+
+        return;
+    }
+
+
+    screen.innerHTML = `
+
+        <div class="top">
+
+            <strong>
+                Room
+                ${esc(
+                    state.roomCode
+                )}
+            </strong>
+
+            <span class="badge">
+
+                ${state.players.length}
+                Players
+
+            </span>
+
+        </div>
+
+
+        <div class="status">
+
+            ${
+                myTurn
+
+                ?
+
+                "🔥 <b>TUMHARI TURN</b> — card select karo aur player choose karo."
+
+                :
+
+                "⏳ <b>" +
+                esc(
+                    state.players.find(
+                        p =>
+                            p.id ===
+                            state.currentPlayerId
+                    )?.name
+                    ||
+                    "Next player"
+                ) +
+                "</b> ki turn hai."
+            }
+
+        </div>
+
+
+        <h3>
+            🃏 Your Cards
+            (${state.cards.length})
+        </h3>
+
+
+        <div class="cards">
+
+            ${
+                state.cards.map(
+                    (card,index) => `
+
+                        <div
+                            class="
+                                cardItem
+                                ${
+                                    selectedCard === index
+                                    ? "selected"
+                                    : ""
+                                }
+                            "
+                            onclick="
+                                selectCard(
+                                    ${index}
+                                )
+                            "
+                        >
+
+                            ${esc(card)}
+
+                        </div>
+
+                    `
+                ).join("")
+            }
+
+        </div>
+
+
+        <h3>
+            👉 Card kis player ko deni hai?
+        </h3>
+
+
+        <div class="targetGrid">
+
+            ${
+                state.players
+                    .filter(
+                        p =>
+                            p.id !==
+                            socket.id
+                    )
+                    .map(
+                        p => `
+
+                            <button
+                                class="
+                                    target
+                                    ${
+                                        selectedTarget === p.id
+                                        ? "selected"
+                                        : ""
+                                    }
+                                "
+                                onclick="
+                                    selectTarget(
+                                        '${p.id}'
+                                    )
+                                "
+                            >
+
+                                👤
+                                ${esc(
+                                    p.name
+                                )}
+
+                            </button>
+
+                        `
+                    ).join("")
+            }
+
+        </div>
+
+
+        <button
+            class="btn blue"
+            onclick="passCard()"
+            ${
+                myTurn
+                ? ""
+                : "disabled"
+            }
+        >
+
+            PASS SELECTED CARD
+
+        </button>
+
+
+        <div
+            id="error"
+            class="error"
+        ></div>
+
+    `;
+}
+
+
+// =========================================
+// SELECT CARD
+// =========================================
+
+function selectCard(
+    index
+){
+
+    selectedCard =
+        index;
+
+    renderGame(
+        currentState
+    );
+}
+
+
+// =========================================
+// SELECT TARGET
+// =========================================
+
+function selectTarget(
+    id
+){
+
+    selectedTarget =
+        id;
+
+    renderGame(
+        currentState
+    );
+}
+
+
+// =========================================
+// PASS CARD
+// =========================================
+
+function passCard(){
+
+    if(
+        currentState.currentPlayerId !==
+        socket.id
+    ){
+
+        errorText(
+            "Abhi tumhari turn nahi hai."
+        );
+
+        return;
+    }
+
+    if(
+        selectedCard === null
+    ){
+
+        errorText(
+            "Pehle card select karo."
+        );
+
+        return;
+    }
+
+    if(
+        !selectedTarget
+    ){
+
+        errorText(
+            "Pehle player select karo."
+        );
+
+        return;
+    }
+
+    socket.emit(
+        "passCard",
+        {
+            cardIndex:
+                selectedCard,
+
+            targetId:
+                selectedTarget
+        },
+        result => {
+
+            if(
+                !result?.success
+            ){
+
+                errorText(
+                    result?.message
+                );
+
+                return;
+            }
+
+            selectedCard =
+                null;
+
+            selectedTarget =
+                null;
+        }
+    );
+}
+
+
+// =========================================
+// NEW ROUND
+// =========================================
+
+function newRound(){
+
+    selectedCard =
+        null;
+
+    selectedTarget =
+        null;
+
+    socket.emit(
+        "newRound",
+        result => {
+
+            if(
+                !result?.success
+            ){
+
+                errorText(
+                    result?.message
+                );
+
+            }
+
+        }
+    );
+}
+
+</script>
+
+</body>
+</html>
