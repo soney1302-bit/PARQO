@@ -411,40 +411,60 @@ input:focus{
 }
 
 .cardItem{
+    width:100px;
+    min-height:125px;
+    border-radius:18px;
 
-    width:90px;
-
-    min-height:105px;
-
-    border-radius:16px;
-
-    background:#f8fafc;
-
+    background:linear-gradient(145deg,#ffffff,#e2e8f0);
     color:#111827;
 
-    padding:10px;
+    padding:12px;
 
     display:flex;
-
+    flex-direction:column;
     align-items:center;
-
     justify-content:center;
 
     text-align:center;
-
     font-weight:900;
+    font-size:15px;
 
     box-shadow:
-        0 8px 18px
-        rgba(0,0,0,.25);
+        0 10px 22px rgba(0,0,0,.30),
+        inset 0 0 0 2px rgba(255,255,255,.8);
 
     cursor:pointer;
 
-    border:
-        4px solid
-        transparent;
+    border:4px solid transparent;
 
-    transition:.15s;
+    position:relative;
+    overflow:hidden;
+
+    transition:
+        transform .18s,
+        box-shadow .18s,
+        border-color .18s;
+}
+
+.cardItem::before{
+    content:"🃏";
+    font-size:34px;
+    margin-bottom:8px;
+}
+
+.cardItem:hover{
+    transform:translateY(-6px) scale(1.03);
+    box-shadow:
+        0 14px 28px rgba(0,0,0,.35);
+}
+
+.cardItem.selected{
+    border-color:#facc15;
+    transform:translateY(-8px) scale(1.05);
+
+    box-shadow:
+        0 12px 30px rgba(250,204,21,.45),
+        0 0 0 3px rgba(250,204,21,.15);
 }
 
 .cardItem.selected{
