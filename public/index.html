@@ -446,11 +446,7 @@ input:focus{
         border-color .18s;
 }
 
-.cardItem::before{
-    content:"🃏";
-    font-size:34px;
-    margin-bottom:8px;
-}
+
 
 .cardItem:hover{
     transform:translateY(-6px) scale(1.03);
@@ -478,7 +474,54 @@ input:focus{
         0 10px 25px
         rgba(250,204,21,.25);
 }
+/* =========================
+   PARQO CARD THEMES
+========================= */
 
+.card-fruit{
+    background:linear-gradient(145deg,#fff7ed,#fed7aa);
+    border-color:#fb923c;
+}
+
+.card-animal{
+    background:linear-gradient(145deg,#ecfccb,#bef264);
+    border-color:#65a30d;
+}
+
+.card-character{
+    background:linear-gradient(145deg,#ede9fe,#c4b5fd);
+    border-color:#8b5cf6;
+}
+
+.card-movie{
+    background:linear-gradient(145deg,#fee2e2,#fca5a5);
+    border-color:#ef4444;
+}
+
+.card-sport{
+    background:linear-gradient(145deg,#dbeafe,#93c5fd);
+    border-color:#2563eb;
+}
+
+.card-funny{
+    background:linear-gradient(145deg,#fef9c3,#fde047);
+    border-color:#eab308;
+}
+
+.card-place{
+    background:linear-gradient(145deg,#ccfbf1,#5eead4);
+    border-color:#0d9488;
+}
+
+.card-name{
+    background:linear-gradient(145deg,#f1f5f9,#cbd5e1);
+    border-color:#64748b;
+}
+
+.card-parqo{
+    background:linear-gradient(145deg,#f8fafc,#cbd5e1);
+    border-color:#475569;
+}
 .targetGrid{
 
     display:grid;
@@ -1713,6 +1756,7 @@ function renderGame(
                         <div
                             class="
                                 cardItem
+                                card-${getCardTheme(card)[1].toLowerCase()}
                                 ${
                                     selectedCard === index
                                     ? "selected"
