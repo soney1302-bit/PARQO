@@ -1454,7 +1454,119 @@ function startGame(){
 // =========================================
 // RENDER GAME
 // =========================================
+// =========================================
+// CARD THEME
+// =========================================
 
+function getCardTheme(cardName){
+
+    const name = String(cardName || "").toUpperCase();
+
+    const themes = {
+
+        // 🍎 FRUITS
+        MANGO:        ["🍋", "FRUIT"],
+        APPLE:        ["🍎", "FRUIT"],
+        BANANA:       ["🍌", "FRUIT"],
+        ORANGE:       ["🍊", "FRUIT"],
+        GRAPES:       ["🍇", "FRUIT"],
+        PAPAYA:       ["🥭", "FRUIT"],
+        GUAVA:        ["🍐", "FRUIT"],
+        WATERMELON:   ["🍉", "FRUIT"],
+        PINEAPPLE:    ["🍍", "FRUIT"],
+        STRAWBERRY:   ["🍓", "FRUIT"],
+        POMEGRANATE:  ["🍎", "FRUIT"],
+        COCONUT:      ["🥥", "FRUIT"],
+        PEAR:         ["🍐", "FRUIT"],
+        PEACH:        ["🍑", "FRUIT"],
+        CHERRY:       ["🍒", "FRUIT"],
+
+        // 🦁 ANIMALS
+        TIGER:        ["🐯", "ANIMAL"],
+        LION:         ["🦁", "ANIMAL"],
+        ELEPHANT:     ["🐘", "ANIMAL"],
+        HORSE:        ["🐴", "ANIMAL"],
+        MONKEY:       ["🐒", "ANIMAL"],
+        BEAR:         ["🐻", "ANIMAL"],
+        WOLF:         ["🐺", "ANIMAL"],
+        FOX:          ["🦊", "ANIMAL"],
+        DEER:         ["🦌", "ANIMAL"],
+        RABBIT:       ["🐰", "ANIMAL"],
+        PANDA:        ["🐼", "ANIMAL"],
+        GIRAFFE:      ["🦒", "ANIMAL"],
+        ZEBRA:        ["🦓", "ANIMAL"],
+        CAMEL:        ["🐪", "ANIMAL"],
+        CROCODILE:    ["🐊", "ANIMAL"],
+
+        // 🦸 CHARACTERS
+        HERO:         ["🦸", "CHARACTER"],
+        ROBOT:        ["🤖", "CHARACTER"],
+        NINJA:        ["🥷", "CHARACTER"],
+        PIRATE:       ["🏴‍☠️", "CHARACTER"],
+        WIZARD:       ["🧙", "CHARACTER"],
+        SUPERHERO:    ["🦸‍♂️", "CHARACTER"],
+        DETECTIVE:    ["🕵️", "CHARACTER"],
+        COWBOY:       ["🤠", "CHARACTER"],
+        ALIEN:        ["👽", "CHARACTER"],
+        KING:         ["👑", "CHARACTER"],
+        QUEEN:        ["👸", "CHARACTER"],
+        PRINCE:       ["🤴", "CHARACTER"],
+        WARRIOR:      ["⚔️", "CHARACTER"],
+        MAGICIAN:     ["🎩", "CHARACTER"],
+        SPY:          ["🕶️", "CHARACTER"],
+
+        // 🎬 MOVIES
+        DANGAL:       ["🎬", "MOVIE"],
+        SHOLAY:       ["🎞️", "MOVIE"],
+        JAWAN:        ["🎥", "MOVIE"],
+        PATHAAN:      ["🎬", "MOVIE"],
+        KGF:          ["🎞️", "MOVIE"],
+        PUSHPA:       ["🎥", "MOVIE"],
+        "3IDIOTS":    ["🎓", "MOVIE"],
+        BAHUBALI:     ["⚔️", "MOVIE"],
+        RAID:         ["🚨", "MOVIE"],
+        URI:          ["🎖️", "MOVIE"],
+        SULTAN:       ["🥊", "MOVIE"],
+        DON:          ["🕶️", "MOVIE"],
+        LAGAAN:       ["🏏", "MOVIE"],
+        DRISHYAM:     ["👀", "MOVIE"],
+        RRR:          ["🔥", "MOVIE"],
+
+        // ⚽ SPORTS
+        CRICKET:      ["🏏", "SPORT"],
+        FOOTBALL:     ["⚽", "SPORT"],
+        TENNIS:       ["🎾", "SPORT"],
+        HOCKEY:       ["🏑", "SPORT"],
+        BOXING:       ["🥊", "SPORT"],
+        WRESTLING:    ["🤼", "SPORT"],
+        BADMINTON:    ["🏸", "SPORT"],
+        GOLF:         ["⛳", "SPORT"],
+        RACING:       ["🏎️", "SPORT"],
+        KABADDI:      ["🤼", "SPORT"],
+        BASKETBALL:   ["🏀", "SPORT"],
+        VOLLEYBALL:   ["🏐", "SPORT"],
+        CHESS:        ["♟️", "SPORT"],
+        SWIMMING:     ["🏊", "SPORT"],
+        CYCLING:      ["🚴", "SPORT"],
+
+        // 😂 FUNNY
+        CHOCOLATE:    ["🍫", "FUNNY"],
+        BOSS:         ["😎", "FUNNY"],
+        DONKEY:       ["🫏", "FUNNY"],
+        ROCKET:       ["🚀", "FUNNY"],
+        BULLET:       ["💥", "FUNNY"],
+        CHAMP:        ["🏆", "FUNNY"],
+        JOKER:        ["🃏", "FUNNY"],
+        BOSSBABU:     ["😎", "FUNNY"],
+        SAMOSA:       ["🥟", "FUNNY"],
+        JALEBI:       ["🍩", "FUNNY"],
+        MAGGI:        ["🍜", "FUNNY"],
+        LASSI:        ["🥛", "FUNNY"],
+        PAPPU:        ["😂", "FUNNY"]
+    };
+
+    return themes[name] || ["🃏", "PARQO"];
+}
 function renderGame(
     state
 ){
@@ -1614,7 +1726,7 @@ function renderGame(
                             "
                         >
 
-                            ${esc(card)}
+                            ${getCardTheme(card)[0]}<br>${esc(card)}
 
                         </div>
 
