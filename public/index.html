@@ -1617,7 +1617,10 @@ function renderGame(
     const myTurn =
         state.currentPlayerId ===
         socket.id;
-
+const turnMessage =
+    myTurn
+        ? "🟢 YOUR TURN — Card pass karo!"
+        : "🔴 WAIT — Dusre player ki turn hai!";
     const winner =
         state.winnerId;
 
