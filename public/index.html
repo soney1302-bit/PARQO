@@ -549,16 +549,31 @@ input:focus{
 }
 
 .status{
+    padding:15px 18px;
+    border-radius:16px;
 
-    padding:13px;
+    background:linear-gradient(
+        135deg,
+        #111827,
+        #1e293b
+    );
 
-    border-radius:12px;
-
-    background:#0f172a;
-
-    margin:12px 0;
+    margin:14px 0;
 
     text-align:center;
+
+    font-size:16px;
+    font-weight:800;
+
+    border:1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.25),
+        inset 0 1px 0 rgba(255,255,255,.08);
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
 }
 
 .win{
@@ -1617,10 +1632,7 @@ function renderGame(
     const myTurn =
         state.currentPlayerId ===
         socket.id;
-const turnMessage =
-    myTurn
-        ? "🟢 YOUR TURN — Card pass karo!"
-        : "🔴 WAIT — Dusre player ki turn hai!";
+
     const winner =
         state.winnerId;
 
