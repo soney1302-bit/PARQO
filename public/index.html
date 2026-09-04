@@ -1632,7 +1632,16 @@ function renderGame(
     const myTurn =
         state.currentPlayerId ===
         socket.id;
+const currentIndex =
+    state.players.findIndex(
+        p => p.id === state.currentPlayerId
+    );
 
+const nextPlayerId =
+    state.players[
+        (currentIndex + 1) %
+        state.players.length
+    ]?.id;
     const winner =
         state.winnerId;
 
