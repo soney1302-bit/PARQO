@@ -558,7 +558,14 @@ io.on("connection", (socket) => {
                 String(
                     data?.targetId || ""
                 );
+const currentIndex = room.players.findIndex(
+    (p) => p.id === socket.id
+);
 
+const nextPlayerId =
+    room.players[
+        (currentIndex + 1) % room.players.length
+    ].id;
             const player =
                 room.players.find(
                     (p) =>
@@ -576,7 +583,12 @@ io.on("connection", (socket) => {
                 !target ||
                 target.id === player.id
             ) {
-
+if (target.id !== nextPlayerId) {
+    return callback?.({
+        success: false,
+        message: "Sirf next player ko card pass kar sakte ho."
+    });
+}
                 return callback?.({
                     success: false,
                     message:
