@@ -9,7 +9,178 @@ const io = new Server(server);
 app.use(express.static("public"));
 
 const rooms = {};
+// =========================================
+// PARQO WORLDWIDE NAME POOLS
+// =========================================
 
+const COUNTRY_POOLS = {
+
+    IN: {
+        country: "India",
+
+        categories: {
+
+            funny: [
+                "Jalebi Joker",
+                "Chai Champion",
+                "Samosa Sultan",
+                "Dilli Don",
+                "Mumbai Maska",
+                "Pappu Rocket",
+                "Golu Boss",
+                "Nautanki Nawab"
+            ],
+
+            cinema: [
+                "Filmy Fauji",
+                "Hero Babu",
+                "Drama Don",
+                "Picture Pandit",
+                "Cinema Chacha",
+                "Masala Master"
+            ],
+
+            sports: [
+                "Cricket Champ",
+                "Gully King",
+                "Batting Babu",
+                "Sixer Singh",
+                "Goal Guru",
+                "Kabaddi King"
+            ],
+
+            cars: [
+                "Desi Racer",
+                "Turbo Tinku",
+                "Road Raja",
+                "Speedy Sher",
+                "Auto Anari",
+                "Highway Hero"
+            ],
+
+            places: [
+                "Dilli Dhamaka",
+                "Mumbai Masti",
+                "Jaipur Jhakaas",
+                "Kota King",
+                "Goa Gangster",
+                "Punjab Power"
+            ]
+
+        }
+    },
+
+
+    US: {
+        country: "United States",
+
+        categories: {
+
+            funny: [
+                "Burger Boss",
+                "Pizza Dude",
+                "Crazy Cowboy",
+                "Rocket Bro",
+                "Super Dude",
+                "Chill Champ",
+                "Funny Rider",
+                "Big Boss"
+            ],
+
+            cinema: [
+                "Movie Maverick",
+                "Action Ace",
+                "Drama Dude",
+                "Hollywood Hero",
+                "Screen Boss",
+                "Cinema Champ"
+            ],
+
+            sports: [
+                "Touchdown Tiger",
+                "Basketball Boss",
+                "Fast Runner",
+                "Baseball Beast",
+                "Skate Champ",
+                "Boxing Boss"
+            ],
+
+            cars: [
+                "Muscle Mike",
+                "Turbo Jack",
+                "Road Rocket",
+                "Speed King",
+                "Drift Dude",
+                "Highway Hawk"
+            ],
+
+            places: [
+                "New York Ninja",
+                "Texas Titan",
+                "Miami Monster",
+                "Vegas Viking",
+                "LA Legend",
+                "Chicago Champ"
+            ]
+
+        }
+    },
+
+
+    JP: {
+        country: "Japan",
+
+        categories: {
+
+            funny: [
+                "Sushi Samurai",
+                "Noodle Ninja",
+                "Tokyo Turbo",
+                "Kawaii King",
+                "Mochi Master",
+                "Funny Ronin"
+            ],
+
+            cinema: [
+                "Cinema Samurai",
+                "Anime Ace",
+                "Tokyo Hero",
+                "Movie Ninja",
+                "Manga Master",
+                "Screen Ronin"
+            ],
+
+            sports: [
+                "Karate King",
+                "Speed Samurai",
+                "Baseball Ninja",
+                "Judo Joker",
+                "Runner Ronin",
+                "Sumo Star"
+            ],
+
+            cars: [
+                "Turbo Samurai",
+                "Drift Dragon",
+                "Tokyo Racer",
+                "Speed Ninja",
+                "Road Ronin",
+                "JDM Joker"
+            ],
+
+            places: [
+                "Tokyo Tiger",
+                "Osaka Ninja",
+                "Kyoto King",
+                "Fuji Fighter",
+                "Nara Ninja",
+                "Tokyo Turbo"
+            ]
+
+        }
+    }
+
+};
 const NAME_POOLS = {
     animals: [
         "TIGER", "LION", "ELEPHANT", "HORSE", "MONKEY",
@@ -91,9 +262,14 @@ function sendPlayers(roomCode) {
     });
 }
 
-function getRandomCardNames(count) {
+function getRandomCardNames(count, countryCode = "IN") {
 
-    const allNames = Object.values(NAME_POOLS).flat();
+    const country =
+        COUNTRY_POOLS[countryCode] ||
+        COUNTRY_POOLS.IN;
+
+    const allNames =
+        Object.values(country.categories).flat();
 
     const shuffled = [...allNames].sort(
         () => Math.random() - 0.5
@@ -103,9 +279,13 @@ function getRandomCardNames(count) {
 }
 
 
-function createDeck(playerCount) {
+function createDeck(playerCount, countryCode = "IN") {
 
-    const selectedNames = getRandomCardNames(playerCount);
+    const selectedNames =
+        getRandomCardNames(
+            playerCount,
+            countryCode
+        );
 
     const deck = [];
 
@@ -124,7 +304,10 @@ function createDeck(playerCount) {
     );
 }
 function dealCards(room) {
-    const deck = createDeck(room.players.length);
+    const deck = createDeck(
+    room.players.length,
+    room.countryCode
+);
 
     room.players.forEach((player) => {
         player.cards = [];
@@ -244,7 +427,7 @@ io.on("connection", (socket) => {
             rooms[roomCode] = {
 
                 code: roomCode,
-
+countryCode: "IN",
                 hostId: socket.id,
 
                 players: [
