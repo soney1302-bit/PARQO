@@ -878,7 +878,20 @@ function getName(){
 // =========================================
 // CREATE ROOM
 // =========================================
+function getCountryCode(){
 
+    const language =
+        navigator.language ||
+        navigator.userLanguage ||
+        "";
+
+    const country =
+        language.split("-")[1];
+
+    return country
+        ? country.toUpperCase()
+        : "IN";
+}
 function createRoom(){
 
     const name =
@@ -896,6 +909,7 @@ function createRoom(){
     socket.emit(
         "createRoom",
         name,
+        getCountryCode(),
         result => {
 
             if(
