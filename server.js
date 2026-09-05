@@ -406,7 +406,7 @@ io.on("connection", (socket) => {
 
     socket.on(
         "createRoom",
-        (playerName, callback) => {
+       (playerName, countryCode, callback) => {
 
             const name =
                 String(playerName || "").trim();
@@ -423,11 +423,12 @@ io.on("connection", (socket) => {
 
             const roomCode =
                 makeRoomCode();
-
+const selectedCountry =
+    String(countryCode || "IN").toUpperCase();
             rooms[roomCode] = {
 
                 code: roomCode,
-countryCode: "IN",
+countryCode: selectedCountry,
                 hostId: socket.id,
 
                 players: [
